@@ -118,7 +118,7 @@
      downloadProgressBlock:(void (^)(CGFloat progress))downloadProgressBlock
                 completion:(void (^)(CGImageRef image, NSError *error))completion
 {
-    [[SDWebImageManager sharedManager] downloadImageWithURL:URL options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+    return [[SDWebImageManager sharedManager] downloadImageWithURL:URL options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
         if (downloadProgressBlock)
         {
             CGFloat progressPercent = (CGFloat)receivedSize / (CGFloat)expectedSize;
@@ -151,16 +151,14 @@
             }
         }
     }];
-    
-    return nil; // Note: it expects an NSOpertationQueue Instance to be used in cancelling the operation (currently not allowing downloads to be manually cancelled)
 }
 
 - (void)cancelImageDownloadForIdentifier:(id)downloadIdentifier
 {
-    /** 
-     Not allowing downloads to be cancelled at present (There's a lot of work 
-     involved in achieveing this, including modification of the external SDWebImage Framework)
-     TODO: Update SDWebImage and implement a cancel operation method
-     */
+    if ([[downloadIdentifier class] conformsToProtocol:@protocol(SDWebImageOperation)])
+    {
+        id<SDWebImageOperation> downloadOperation = downloadIdentifier;
+        [downloadOperation cancel];
+    }
 }
 @end
