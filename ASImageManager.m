@@ -79,11 +79,11 @@
                                                                         done:^(UIImage *image, SDImageCacheType cacheType) {
                                                                             if (callbackQueue)
                                                                             {
-                                                                                UIImage __block *blockImage = image;
+                                                                                UIImage __weak *weakImage = image;
                                                                                 dispatch_async(callbackQueue, ^{
                                                                                     if (completion)
                                                                                     {
-                                                                                        completion(blockImage.CGImage);
+                                                                                        completion(weakImage.CGImage);
                                                                                     }
                                                                                 });
                                                                             }
@@ -139,10 +139,10 @@
         {
             if (callbackQueue)
             {
-                UIImage __block *blockImage = image;
-                NSError __block *blockError = error;
+                UIImage __weak *weakImage = image;
+                NSError __weak *weakError = error;
                 dispatch_async(callbackQueue, ^{
-                    completion(blockImage.CGImage, blockError);
+                    completion(weakImage.CGImage, weakError);
                 });
             }
             else
