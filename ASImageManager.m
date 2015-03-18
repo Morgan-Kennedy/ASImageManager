@@ -79,7 +79,7 @@
                                                                         done:^(UIImage *image, SDImageCacheType cacheType) {
                                                                             if (callbackQueue)
                                                                             {
-                                                                                UIImage __weak *weakImage = image;
+                                                                                UIImage __unsafe_unretained *weakImage = image;
                                                                                 dispatch_async(callbackQueue, ^{
                                                                                     if (completion)
                                                                                     {
@@ -139,8 +139,8 @@
         {
             if (callbackQueue)
             {
-                UIImage __weak *weakImage = image;
-                NSError __weak *weakError = error;
+                UIImage __unsafe_unretained *weakImage = image;
+                NSError __unsafe_unretained *weakError = error;
                 dispatch_async(callbackQueue, ^{
                     completion(weakImage.CGImage, weakError);
                 });
